@@ -2,16 +2,29 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { axiosEcommerce } from "../utils/configAxios"
 import Product from "../components/home/Product"
+import ListProducts from "../components/home/ListProducts"
 
 const Home = () => {
 
     const [products, setProducts] = useState([])
-
     const [categories, setCategories] = useState([])
+    const [productName, setProductName] = useState("")
+    const [currentCategory, setCurrentCategory] = useState("")
+
+    const productsByname = products.filter((product) => product.title.toLowerCase().includes(productName))
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const currentProuctName = e.target.productName.value
+        setProductName(currentProuctName.toLowerCase())
+    }
+
+    const handleClickCategory = (e) =>{
+        setCurrentCategory(e.target.dataset.category)
+    }
 
 
     useEffect(() => {
-        const URL = "https://e-commerce-api-v2.academlo.tech/api/v1/categories"
 
         axiosEcommerce
             .get("/categories")
@@ -21,43 +34,32 @@ const Home = () => {
     }, [])
 
     useEffect(() => {
-
-        const URL="https://e-commerce-api-v2.academlo.tech/api/v1/products"
-        
         axiosEcommerce
-            .get("/products")
+            .get(`/products?categoryId=${currentCategory}`)
             .then(({data})=> setProducts(data))
             .catch((err)=>console.log(err))
-      
-    }, [])
-    
-    
-
-    
+        
+    }, [currentCategory])
 
   return (
     <section>
-        <form>
+        <form onSubmit={handleSubmit}>
             <div>
-                <input type="text" />
+                <input id="productName" type="text" />
                 <button><i className='bx bx-search'></i></button>
             </div>
 
             <section>
                 <h4>Category</h4>
                 <ul>
-                    <li>All Category</li>
+                    <li data-category = "" onClick={handleClickCategory}>All Category</li>
                     {
-                        categories.map((categorie)=><li key={categorie.id}>{categorie.name}</li>)
+                        categories.map((categorie)=><li onClick={handleClickCategory} data-category = {categorie.id} key={categorie.id}>{categorie.name}</li>)
                     }
                 </ul>
             </section>
 
-            <section className="grid gap-10">
-                {
-                    products.map((product)=> <Product key={product.id} product={product}/>)
-                }
-            </section>
+            <ListProducts products={productsByname}/>
         </form>
     </section>
   )

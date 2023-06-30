@@ -6,6 +6,7 @@ import ProductDetail from './pages/ProductDetail'
 import Purchases from './pages/Purchases'
 import Header from './components/layout/Header'
 import ProtectedRoudes from './components/auth/ProtectedRoudes'
+import Cart from './components/Cart/Cart'
 
 function App() {
   
@@ -30,6 +31,7 @@ function App() {
 
 
       </Routes>
+      <Cart/>
     </main>
   )
 }

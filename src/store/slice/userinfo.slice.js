@@ -10,19 +10,19 @@ const initialState = {
 }
 
 const userInfoSlice = createSlice({
-    initialState: JSON.parse(localStorage.getItem("userinfo")) ?? initialState,
+    initialState: JSON.parse(localStorage.getItem("userInfo")) ?? initialState,
     name: "userInfo",
     reducers:{
         setUserInfo:(state, action)=>{
             const responseLogin =  action.payload
             const newState ={...state, ...responseLogin}
-            localStorage.setItem("userinfo",JSON.stringify(newState))
+            localStorage.setItem("userInfo",JSON.stringify(newState))
             return newState
         },
 
         logout:(state)=>{ 
             const newState ={...state, ...initialState}
-            localStorage.setItem("userinfo",JSON.stringify(newState))
+            localStorage.setItem("userInfo",JSON.stringify(newState))
             return newState
 
         },
